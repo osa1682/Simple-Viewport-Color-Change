@@ -1,0 +1,22 @@
+import maya.cmds as cmds
+
+def create_color_adjustment_ui():
+    if cmds.window("colorAdjustmentWindow", exists=True):
+        cmds.deleteUI("colorAdjustmentWindow", window=True)
+
+    window = cmds.window("colorAdjustmentWindow", title=" Viewport Color Adjustment", widthHeight=(300, 200))
+    cmds.columnLayout(adjustableColumn=True)
+
+    cmds.colorSliderGrp('backgroundColor', label='Background Color', rgb=(0.0, 0.0, 0.0))
+
+    cmds.button(label="Apply", command=apply_color_adjustments)
+    cmds.button(label="Close", command=('cmds.deleteUI(\"' + window + '\", window=True)'))
+
+    cmds.showWindow(window)
+
+def apply_color_adjustments(*args):
+    bg_color = cmds.colorSliderGrp('backgroundColor', query=True, rgb=True)
+
+    cmds.displayRGBColor('background', bg_color[0], bg_color[1], bg_color[2])
+
+create_color_adjustment_ui()
